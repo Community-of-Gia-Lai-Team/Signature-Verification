@@ -13,9 +13,8 @@ def image_preprocess(img):
     img = cv2.resize(img, (224,224))
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (3,3), 0)
-    thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-    img = cv2.bitwise_not(thresh)
-    img = cv2.merge([img,img,img])
+    thresh = cv2.threshold(blur, 135, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    img = cv2.merge([thresh,thresh,thresh])
     x = np.expand_dims(img, axis=0)
     x = preprocess_input(x)
     return x

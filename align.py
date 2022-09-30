@@ -155,8 +155,7 @@ def convert(img, save_mode='binary'):
 
             # conduct simple binary thresholding for ease of further processing; the first
             # option of the function is the actual threshold value
-            blur = cv2.GaussianBlur(img_corrected_gray, (3,3), 0)
-            img_thresh = cv2.threshold(blur, 135, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+            img_thresh = cv2.threshold(img_corrected_gray, 135, 255, cv2.THRESH_BINARY)[1]
 
             # write inverted binary image to file
             cv2.imwrite("./aligned/aligned.png", img_thresh)
@@ -170,8 +169,7 @@ def convert(img, save_mode='binary'):
             return img, False
         elif save_mode == 'binary':
             img_corrected_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            blur = cv2.GaussianBlur(img_corrected_gray, (3,3), 0)
-            img_thresh = cv2.threshold(blur, 135, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+            img_thresh = cv2.threshold(img_corrected_gray, 135, 255, cv2.THRESH_BINARY)[1]
             cv2.imwrite("./aligned/aligned.png", img_thresh)
             return img, False
 
