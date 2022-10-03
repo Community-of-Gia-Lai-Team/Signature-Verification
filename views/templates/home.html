@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signature Recognition App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="{{ url_for('static', path='css/home.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="logo">
+        <a href="https://softworldvietnam.com/" class="sw_logo">
+            <img src="static/assets/sw_logo.png" alt="sw.png" />
+        </a>
+        <div class="header_text">
+            <h1>Signature Recognition v1.0</h1>
+            <!-- <h5>@Beta version</h5> -->
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="container" id="upload">
+            <form class="upload_form">
+                <h3>Upload your File :</h3>
+                <div class="drag-area">
+                    <div class="icon">
+                        <i class="fa fa-solid fa-file-contract"></i>
+                    </div>
+                    <span class="header">Drag & Drop</span>
+                    <span class="header_2">or <span class="button">Browse</span></span>
+                    <input type="file" class="file_upload" hidden />
+                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                    <span class="note">Tip: Image of document should be aligned first to get the best results</span>
+                </div>
+                <div class="container_submit">
+                    <button type="button" class="btn" id="clear_btn" style="display:none">Clear</button>
+                    <button class="btn" id="recognize_btn">Recognize</button>
+                </div>
+            </form>
+        </div>
+        <div class="show_results" style="display: none;">
+            <h3>Signatures :</h3>
+            <div class="signature_detected"></div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer_prop">
+            <a class="location" href="https://www.google.com/maps/search/?api=1&query=Softworld+VietNam+Ltd">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>6F MG Building, 54/31 Phổ Quang, Phường 2, Quận Tân Bình, TP Hồ Chí Minh</span>
+            </a>
+            <div class="hotline">
+                <i class="fas fa-phone-alt"></i>
+                <span>(+84) 898 300 056</span>
+            </div>
+            <div class="email">
+                <i class="fas fa-envelope-open-text"></i>
+                <span>contact@softworldvietnam.com</span>
+            </div>
+            <div class="license">
+                <span>© 2021 SW4.0. All Rights Reserved by Softworld Vietnam</span>
+            </div>
+        </div>
+    </footer>
+</body>
+<script src="{{ url_for('static', path='js/home.js') }}"></script>
+
+</html>

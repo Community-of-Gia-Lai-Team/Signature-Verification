@@ -20,7 +20,13 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 
 
-def detect(source='inference/images', img_size=640, conf_thres=0.25, iou_thres=0.45,
+def load_model(weights_path=['weights/best.pt'], device=''):
+    os.chdir(os.path.join(os.getcwd(),'yolov7'))
+    model = attempt_load(weights_path, map_location=select_device(device))
+    os.chdir('..')
+    return model
+
+def detect(model, source='inference/images', img_size=640, conf_thres=0.25, iou_thres=0.45,
             device='', weights=['weights/best.pt'], view_img=False, save_txt=False,
             save_conf=False, nosave=False, classes=[1], agnostic_nms=False, augment=False,
             project='runs/detect', name='exp', exist_ok=False, trace=False, save_img=False):
@@ -46,7 +52,7 @@ def detect(source='inference/images', img_size=640, conf_thres=0.25, iou_thres=0
     half = device.type != 'cpu'  # half precision only supported on CUDA
 
     # Load model
-    model = attempt_load(weights, map_location=device)  # load FP32 model
+    # model = attempt_load(weights, map_location=device)  # load FP32 model
     stride = int(model.stride.max())  # model stride
     img_size = check_img_size(img_size, s=stride)  # check img_size
 

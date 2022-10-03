@@ -3,3 +3,5 @@ __pycache__/
 yolov7/weights/
 yolov7/runs
 aligned/
+upload/
+static/results
