@@ -1,0 +1,24 @@
+fastapi
+uvicorn
+opencv-python
+numpy
+tensorflow
+scipy
+torch
+gdown
+pandas
+torchvision
+pyyaml
+matplotlib
+seaborn
+dominate
+Jinja2
+python-multipart
+requests
+tqdm
+protobuf
+tensorboard
+psutil  # system utilization
+thop  # FLOPs computation
+wandb
+visdom
