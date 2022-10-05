@@ -7,22 +7,27 @@ import pickle
 from recognize import signature_recognize
 from config import HOST, PORT, UPLOAD_PATH, SIGNATURE_PATH, FEATURES_PATH
 import vgg16
+from gan_files.test import load_gan_model
 from yolov7.detect import load_model
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="views/templates")
 
-FEATURES_VECTORS = pickle.load(open(FEATURES_PATH, 'rb'))
-MODEL_VGG = vgg16.init_model()
-YOLO_MODEL = load_model()
+@app.on_event("startup")
+async def init_data():
+    global FEATURES_VECTORS, MODEL_VGG, YOLO_MODEL, GAN_MODEL
+    FEATURES_VECTORS = pickle.load(open(FEATURES_PATH, 'rb'))
+    MODEL_VGG = vgg16.init_model()
+    YOLO_MODEL = load_model()
+    GAN_MODEL = load_gan_model()
 
 @app.get('/')
 async def homepage(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 @app.post('/recognize')
-async def recognize_signature(image: UploadFile = File(...)):
+def recognize_signature(image: UploadFile = File(...)):
     # If upload dir not exist -> Create
     if not os.path.isdir(UPLOAD_PATH):
         os.mkdir(UPLOAD_PATH)
@@ -33,13 +38,12 @@ async def recognize_signature(image: UploadFile = File(...)):
     
     # Get image from request
     file_location = f"./{UPLOAD_PATH}/{image.filename}"
-    contents = await image.read()
+    contents = image.file.read()
     with open(file_location, 'wb') as f:
         f.write(contents)
     
     # Detect and Recognize signatures
-    results = signature_recognize(YOLO_MODEL, file_location, FEATURES_VECTORS, MODEL_VGG)
-    print(results)
+    results = signature_recognize(YOLO_MODEL, file_location, FEATURES_VECTORS, MODEL_VGG, GAN_MODEL)
     
     if results['signature_found']:
         return {
@@ -68,7 +72,7 @@ async def recognize_signature_noui(request: Request):
             'message': 'Not found image'
     }
 
-    results = signature_recognize(YOLO_MODEL, img_path, FEATURES_VECTORS, MODEL_VGG)
+    results = signature_recognize(YOLO_MODEL, img_path, FEATURES_VECTORS, MODEL_VGG, GAN_MODEL)
 
     if not results['signature_found']:
         return {

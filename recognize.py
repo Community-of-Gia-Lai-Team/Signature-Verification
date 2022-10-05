@@ -2,18 +2,28 @@ import cv2
 import os
 import vgg16
 from align import convert, denormalize_cord, customize_boxes
+from cvtools import gan_preprocessing
 from yolov7.detect import detect
-from config import THRESHOLD, ALIGNED_PATH, SIGNATURE_PATH
+from gan_files.test import remove_noise
+from config import GAN_SOURCE_PATH, THRESHOLD, ALIGNED_PATH, SIGNATURE_PATH, GAN_OUTPUT_PATH
 import time
 
-def cleaning(sig_path):
-    if not os.path.isdir(sig_path):
-        os.mkdir(sig_path)
-    else:
-        for item in os.listdir(sig_path):
-            os.remove(os.path.join(sig_path, item))
+def cleaning(path):
+    if type(path) == str:
+        if not os.path.exists(path):
+            os.makedirs(path)
+        else:
+            for item in os.listdir(path):
+                os.remove(os.path.join(path, item))
+    elif type(path) == list:
+        for p in path:
+            if not os.path.exists(p):
+                os.makedirs(p)
+            else:
+                for item in os.listdir(p):
+                    os.remove(os.path.join(p, item))
 
-def signature_recognize(yolo_model, img_path, features_vectors , model_vgg, thresh=THRESHOLD, aligned_path=ALIGNED_PATH, signature_path=SIGNATURE_PATH):
+def signature_recognize(yolo_model, img_path, features_vectors , model_vgg, gan_model ,thresh=THRESHOLD, aligned_path=ALIGNED_PATH, signature_path=SIGNATURE_PATH, gan_source_path = GAN_SOURCE_PATH, gan_output_path=GAN_OUTPUT_PATH):
     
     """
         Parameters:
@@ -35,8 +45,9 @@ def signature_recognize(yolo_model, img_path, features_vectors , model_vgg, thre
     boxes = [customize_boxes(denormalize_cord(box[1:],w,h),w,h,30) for box in pred]
 
     if len(boxes) > 0:
-        cleaning(signature_path)
+        cleaning([signature_path, gan_output_path, gan_source_path])
         vectors = features_vectors
+        model, opt, webpage = gan_model
         results = []
 
         for idx, box in enumerate(boxes):
@@ -45,12 +56,17 @@ def signature_recognize(yolo_model, img_path, features_vectors , model_vgg, thre
             cropped_img = copy_img[y1:y2,x1:x2]
             signature_name = f'signature_{idx}.png'
             cv2.imwrite(os.path.join(signature_path, signature_name), cropped_img)
-            pred_class, class_prob = vgg16.predict(model_vgg, cropped_img, vectors)
-            
+            gan_preprocessing(signature_name, cropped_img)
+
+        remove_noise(model, opt, webpage)
+        
+        for idx, _ in enumerate(boxes):
+            new_signature_name = f'signature_{idx}_fake.png'
+            pred_class, class_prob = vgg16.predict(model_vgg, os.path.join(gan_output_path, new_signature_name), vectors)
             if class_prob >= thresh:
                 # print(f"Signature of {pred_class} recognized! ({class_prob})")
                 results.append({
-                    'img_name': signature_name,
+                    'img_name': new_signature_name[:-9] + '.png',
                     'class': pred_class,
                     'conf': round(class_prob*100,2),
                     'message': 'Signature recognized'
@@ -58,7 +74,7 @@ def signature_recognize(yolo_model, img_path, features_vectors , model_vgg, thre
             else:
                 # print("New signature recognized!")
                 results.append({
-                    'img_name': signature_name,
+                    'img_name': new_signature_name[:-9] + '.png',
                     'class': 'New class', # New signature
                     'conf': round(class_prob*100,2),
                     'message': 'New signature recognized'

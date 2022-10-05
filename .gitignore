@@ -5,3 +5,6 @@ yolov7/runs
 aligned/
 upload/
 static/results
+gan_files/checkpoints
+gan_files/datasets
+gan_files/results

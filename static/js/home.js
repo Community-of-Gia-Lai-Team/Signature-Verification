@@ -69,6 +69,7 @@ $(".upload_form").on("submit", function (e) {
     Swal.fire({
         title: "Processing...",
         html: "Please wait a moment",
+        allowOutsideClick: false,
     });
     Swal.showLoading();
 
@@ -88,6 +89,7 @@ $(".upload_form").on("submit", function (e) {
                     icon: "success",
                     title: "Success",
                     text: "Signature recognized successfully!",
+                    allowOutsideClick: false
                 });
                 $(".show_results").css({ 'display': 'table', 'margin-top': '150px'});
                 $('.signature_detected').html('');

@@ -1,5 +1,7 @@
 import numpy as np
+import os
 import cv2
+from config import GAN_SOURCE_PATH
 
 """
 List of functions:
@@ -252,3 +254,10 @@ def perspective_transform(img, pts):
     img_corrected = cv2.warpPerspective(img, matrix, (maxW, maxH))
 
     return img_corrected
+
+def gan_preprocessing(img_name, img, save_dir=GAN_SOURCE_PATH):
+  img = cv2.resize(img, (224,224))
+  gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+  blur = cv2.GaussianBlur(gray, (3,3), 0)
+  thresh = cv2.threshold(blur, 135, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+  cv2.imwrite(os.path.join(save_dir,img_name), thresh)

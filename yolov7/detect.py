@@ -7,6 +7,7 @@ import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
 import gdown
+import glob
 
 import os, sys
 os.chdir(os.path.join(os.getcwd(),'yolov7'))
@@ -22,6 +23,10 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized,
 
 def load_model(weights_path=['weights/best.pt'], device=''):
     os.chdir(os.path.join(os.getcwd(),'yolov7'))
+    if not os.path.exists('weights'):
+        os.makedirs('weights')
+    if not glob.glob(os.path.join('weights', '*.pt')):
+        gdown.download('https://drive.google.com/uc?id=1NY-k2_bADCWDCN6LyXsBq2BNs-rz5yMt', 'weights/best.pt', quiet=False)
     model = attempt_load(weights_path, map_location=select_device(device))
     os.chdir('..')
     return model
@@ -32,11 +37,6 @@ def detect(model, source='inference/images', img_size=640, conf_thres=0.25, iou_
             project='runs/detect', name='exp', exist_ok=False, trace=False, save_img=False):
     
     os.chdir(os.path.join(os.getcwd(),'yolov7'))
-    if not os.path.isdir('weights'):
-        os.mkdir('weights')
-        
-    if not len(os.listdir('./weights')):
-        gdown.download('https://drive.google.com/uc?id=1NY-k2_bADCWDCN6LyXsBq2BNs-rz5yMt', 'weights/best.pt', quiet=False)
 
     save_img = not nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
