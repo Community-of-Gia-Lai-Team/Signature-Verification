@@ -1,4 +1,4 @@
-# Signature-Verification ✍️
+# Signature Verification ✍️
 ## **Introduction**
 
 A useful application verifying the signatures detected in paper document.
