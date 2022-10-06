@@ -1,23 +1,24 @@
 fastapi
 uvicorn
-opencv-python
-numpy
+opencv-python>=4.1.1
+numpy>=1.18.5
+Pillow>=7.1.2
 tensorflow
-scipy
-torch
+scipy>=1.4.1
+torch>=1.7.0,!=1.12.0
 gdown
-pandas
-torchvision
-pyyaml
-matplotlib
-seaborn
+pandas>=1.1.4
+torchvision>=0.8.1,!=0.13.0
+PyYAML>=5.3.1
+matplotlib>=3.2.2
+seaborn>=0.11.0
 dominate
 Jinja2
 python-multipart
-requests
-tqdm
-protobuf
-tensorboard
+requests>=2.23.0
+tqdm>=4.41.0
+protobuf<4.21.3
+tensorboard>=2.4.1
 psutil  # system utilization
 thop  # FLOPs computation
 wandb

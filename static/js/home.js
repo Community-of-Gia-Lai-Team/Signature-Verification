@@ -46,10 +46,10 @@ function displayFile() {
         $("#clear_btn").css({ display: "inline-block" });
         $("#clear_btn").hover(
             function () {
-                $(this).css("background-color", "#CD5C5C");
+                $(this).css({"background-color": "#CD5C5C", "box-shadow": "0px 15px 20px rgba(255, 0, 0, 0.4)"});
             },
             function () {
-                $(this).css("background-color", "#1683ff");
+                $(this).css({"background-color": "#1683ff", "box-shadow": "0px 8px 15px rgba(0, 0, 0, 0.1)"});
             }
         );
     } else {
