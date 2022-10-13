@@ -1,6 +1,7 @@
 FEATURES_PATH = 'data/vectors.pkl'
 ALIGNED_PATH = 'aligned'
 UPLOAD_PATH = 'upload'
+REGISTER_PATH = 'register'
 SIGNATURE_PATH = 'static/results'
 GAN_SOURCE_PATH = 'gan_files/datasets/testB'
 GAN_OUTPUT_PATH = 'gan_files/results/gan_signdata_kaggle/test_latest/images'

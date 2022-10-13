@@ -7,12 +7,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-.header_text{
-  font-size: 20px;
-  margin: 20px;
-  color: #323232;
-}
-
 body {
   display: flex;
   justify-content: center;
@@ -25,6 +19,153 @@ body {
     #cfdef3,
     #e0eafc
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.wrapper_menu {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  left: 0;
+  top: 0;
+}
+.wrapper_menu .fab {
+  background: #4285f4;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  z-index: 3;
+  border-radius: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fab-animation-reverse 0.4s ease-out forwards;
+}
+.wrapper_menu .fab::before, .wrapper .fab::after {
+  display: block;
+  position: absolute;
+  border-radius: 4px;
+  background: #fff;
+}
+.wrapper_menu .fab::before {
+  width: 4px;
+  height: 18px;
+}
+.wrapper_menu .fab::after {
+  width: 18px;
+  height: 4px;
+}
+.wrapper_menu .fac {
+  width: 32px;
+  height: 150px;
+  border-radius: 64px;
+  position: absolute;
+  background: #fff;
+  z-index: 2;
+  padding: 0.5rem 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  top: -40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  transition: opacity 0.2s ease-in, top 0.2s ease-in, width 0.1s ease-in;
+}
+.wrapper_menu .fac a {
+  color: #344955;
+  opacity: 0.8;
+  transition: 0.3s;
+}
+.wrapper_menu .fac a:hover {
+  transition: 0.3s;
+  font-size: 1.5em;
+  opacity: 1;
+  color: #1683ff;
+}
+
+.wrapper_menu input {
+  height: 100%;
+  width: 100%;
+  border-radius: 100%;
+  cursor: pointer;
+  position: absolute;
+  z-index: 5;
+  opacity: 0;
+}
+.wrapper_menu input:checked ~ .fab {
+  animation: fab-animation 0.4s ease-out forwards;
+  background: #CD5C5C;
+
+}
+.wrapper_menu input:checked ~ .fac {
+  width: 50px;
+  height: 200px;
+  animation: fac-animation 0.4s ease-out forwards 0.1s;
+  top: 80px;
+  opacity: 1;
+}
+
+@keyframes fab-animation {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+  20% {
+    transform: rotate(60deg) scale(0.93);
+  }
+  55% {
+    transform: rotate(35deg) scale(0.97);
+  }
+  80% {
+    transform: rotate(48deg) scale(0.94);
+  }
+  100% {
+    transform: rotate(45deg) scale(0.95);
+  }
+}
+@keyframes fab-animation-reverse {
+  0% {
+    transform: rotate(45deg) scale(0.95);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  55% {
+    transform: rotate(10deg);
+  }
+  80% {
+    transform: rotate(-3deg);
+  }
+  100% {
+    transform: rotate(0) scale(1);
+  }
+}
+@keyframes fac-animation {
+  0% {
+    transform: scale(1, 1);
+  }
+  33% {
+    transform: scale(0.95, 1.05);
+  }
+  66% {
+    transform: scale(1.05, 0.95);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.header_text{
+  font-size: 20px;
+  margin: 20px;
+  letter-spacing: 3px;
+  color: #323232;
 }
 
 .container {
@@ -150,7 +291,7 @@ h3 {
 
 footer{
   position: fixed;
-  width: 100%;
+  width: 100%;  
   bottom: 0;
   /* margin-top: 20px; */
   background-color: #282d32;
@@ -205,4 +346,22 @@ footer .license{
 
 .footer_prop {
   text-align: center;
+}
+
+.tooltip_text{
+  position: absolute;
+  left: 150%;
+  width: 250px;
+  display: none;
+}
+
+.wrapper_menu .fac a:hover ~ .tooltip_text{
+  display: flex;
+  background-color: #fff;
+  color:#1683ff;
+  padding: 10px;
+  font-weight: 400;
+  border-radius: 20px;
+  justify-content: center;
+  transition: 0.3s;
 }

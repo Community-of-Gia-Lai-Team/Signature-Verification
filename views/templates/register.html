@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signature Recognition App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="{{ url_for('static', path='css/register.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wrapper_menu">
+        <input type="checkbox" />
+        <div class="fab">
+            <i class="fas fa-plus" style="color: #fff"></i>
+        </div>
+        <div class="fac">
+            <div class="recognize_signature">
+                <a href="/"><i class="fas fa-signature fa-lg"></i></a>
+                <span class="tooltip_text">Recogize Signature</span>
+            </div>
+            <div class="add_signature">
+                <a href="register"><i class="fas fa-database fa-lg"></i></a>
+                <span class="tooltip_text">Register New Signature</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="step-wizard">
+        <ul class="step-wizard-list">
+            <li class="step-wizard-item user-info current-item">
+                <span class="progress-count">1</span>
+                <span class="progress-label">User information</span>
+            </li>
+            <li class="step-wizard-item upload-sig">
+                <span class="progress-count">2</span>
+                <span class="progress-label">Upload signatures</span>
+            </li>
+            <li class="step-wizard-item done">
+                <span class="progress-count">3</span>
+                <span class="progress-label">Done</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- <div class="logo">
+        <a href="https://softworldvietnam.com/" class="sw_logo">
+            <img src="static/assets/sw_logo.png" alt="sw.png" />
+        </a>
+    </div> -->
+
+    <div class="user">
+        <header class="user__header">
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3219/logo.svg" alt="" />
+            <h1 class="user__title">In order to serve the best quality, your information is required</h1>
+        </header>
+
+        <form class="user__form">
+            <div class="form__group">
+                <input type="text" placeholder="Name" class="form__input" id="name" />
+                <label class="form__group__label" for="name">Name</label>
+            </div>
+
+            <!-- <div class="form__group">
+                <input type="date" placeholder="Date" class="form__input" id="dob" />
+                <label class="form__group__label" for="dob">Date of birth</label>
+            </div> -->
+
+            <div class="form__group">
+                <input type="email" placeholder="Email" class="form__input" id="email"/>
+                <label class="form__group__label" for="email">Email</label>
+            </div>
+            <button class="next__btn" type="button">NEXT</button>
+        </form>
+    </div>
+
+    <div class="upload_wrapper">
+        <div class="container" id="upload">
+            <form class="upload_form">
+                <h3>Upload your signatures:</h3>
+                <div class="upload_signatures">
+                <div class="drag-area" id="drag_1">
+                    <div class="icon">
+                        <i class="fas fa-signature"></i>
+                    </div>
+                    <span class="header">Drag & Drop</span>
+                    <span class="header_2">or <span class="button" id="btn_1">Browse</span></span>
+                    <input type="file" class="file_upload" id="upload_1" hidden />
+                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                </div>
+                <div class="drag-area" id="drag_2">
+                    <div class="icon">
+                        <i class="fas fa-signature"></i>
+                    </div>
+                    <span class="header">Drag & Drop</span>
+                    <span class="header_2">or <span class="button" id="btn_2">Browse</span></span>
+                    <input type="file" class="file_upload" id="upload_2" hidden />
+                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                </div>
+                <div class="drag-area" id="drag_3">
+                    <div class="icon">
+                        <i class="fas fa-signature"></i>
+                    </div>
+                    <span class="header">Drag & Drop</span>
+                    <span class="header_2">or <span class="button" id="btn_3">Browse</span></span>
+                    <input type="file" class="file_upload" id="upload_3" hidden />
+                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                </div>
+                <div class="drag-area" id="drag_4">
+                    <div class="icon">
+                        <i class="fas fa-signature"></i>
+                    </div>
+                    <span class="header">Drag & Drop</span>
+                    <span class="header_2">or <span class="button" id="btn_4">Browse</span></span>
+                    <input type="file" class="file_upload" id="upload_4" hidden />
+                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                </div>
+                <div class="drag-area" id="drag_5">
+                    <div class="icon">
+                        <i class="fas fa-signature"></i>
+                    </div>
+                    <span class="header">Drag & Drop</span>
+                    <span class="header_2">or <span class="button" id="btn_5">Browse</span></span>
+                    <input type="file" class="file_upload" id="upload_5" hidden />
+                    <span class="support">Supports: JPEG, JPG, PNG</span>
+                </div>
+            </div>
+                <div class="container_submit">
+                    <button type="button" class="btn" id="clear_btn" style="display:none">Clear</button>
+                    <button class="btn" id="recognize_btn">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer_prop">
+            <a class="location" href="https://www.google.com/maps/search/?api=1&query=Softworld+VietNam+Ltd">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>6F MG Building, 54/31 Phổ Quang, Phường 2, Quận Tân Bình, TP Hồ Chí Minh</span>
+            </a>
+            <div class="hotline">
+                <i class="fas fa-phone-alt"></i>
+                <span>(+84) 898 300 056</span>
+            </div>
+            <div class="email">
+                <i class="fas fa-envelope-open-text"></i>
+                <span>contact@softworldvietnam.com</span>
+            </div>
+            <div class="license">
+                <span>© 2021 SW4.0. All Rights Reserved by Softworld Vietnam</span>
+            </div>
+        </div>
+    </footer>
+</body>
+<script src="{{ url_for('static', path='js/register.js') }}"></script>
+
+</html>

@@ -1,11 +1,12 @@
-from fastapi import FastAPI, Request, File, UploadFile
+from fastapi import FastAPI, Request, File, UploadFile, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from typing import List
 import uvicorn
 import os
 import pickle
 from recognize import signature_recognize
-from config import HOST, PORT, UPLOAD_PATH, SIGNATURE_PATH, FEATURES_PATH
+from config import HOST, PORT, UPLOAD_PATH, SIGNATURE_PATH, FEATURES_PATH, REGISTER_PATH
 import vgg16
 from gan_files.test import load_gan_model
 from yolov7.detect import load_model
@@ -25,6 +26,10 @@ async def init_data():
 @app.get('/')
 async def homepage(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
+
+@app.get('/register')
+async def homepage(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
 
 @app.post('/recognize')
 def recognize_signature(image: UploadFile = File(...)):
@@ -84,7 +89,35 @@ async def recognize_signature_noui(request: Request):
             'code': 200,
             'signature': results['data']
         }
+
+@app.post('signature/register')
+async def register_signature(name : str = Form(...), images: List[UploadFile] = File(...)):
+    # If upload dir not exist -> Create
+    if not os.path.isdir(REGISTER_PATH):
+        os.mkdir(REGISTER_PATH)
     
+    # Cleaning the folder before starting a new session
+    for item in os.listdir(REGISTER_PATH):
+        os.remove(os.path.join(REGISTER_PATH, item))
+
+    for image in images:
+        file_location = f"./{REGISTER_PATH}/{image.filename}"
+        contents = await image.read()
+        with open(file_location, 'wb') as f:
+            f.write(contents)
+    
+    name = name.upper()
+
+    for image in os.listdir(REGISTER_PATH):
+        feature = vgg16.extract_vector(MODEL_VGG, os.path.join(REGISTER_PATH, image))
+        FEATURES_VECTORS.append([feature, name])
+
+    pickle.dump(FEATURES_VECTORS, open(FEATURES_PATH, 'wb'))
+    
+    return {
+        'code': 200
+    }
+
 if __name__ == "__main__":
     uvicorn.run("api:app", host=HOST, port=PORT, reload=True, debug=True)
 

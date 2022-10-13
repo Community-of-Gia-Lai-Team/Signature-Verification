@@ -3,6 +3,7 @@ from scipy.spatial import distance
 from keras.models import Model
 import cv2
 import numpy as np
+import random
 
 def init_model():
     vgg16_model = VGG16(weights="imagenet")
@@ -11,8 +12,13 @@ def init_model():
 
 def image_preprocess(img_path):
     img = cv2.imread(img_path, 0)
-    thresh = cv2.threshold(img, 135, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    img = cv2.merge([thresh,thresh,thresh])
+    img = cv2.resize(img,(224,224))
+    # thresh = cv2.threshold(img, 135, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    _, thresh = cv2.threshold(img,155,255,cv2.THRESH_BINARY_INV)
+    img = cv2.dilate(thresh,np.ones((3,3),np.uint8),iterations = 1)
+    thresh = cv2.bitwise_not(img)
+    cv2.imwrite(f'{random.randint(0,99999)}.png', thresh)
+    img = cv2.merge([thresh, thresh, thresh])
     x = np.expand_dims(img, axis=0)
     x = preprocess_input(x)
     return x

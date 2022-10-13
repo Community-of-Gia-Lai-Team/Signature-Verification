@@ -4,6 +4,7 @@ yolov7/weights/
 yolov7/runs
 aligned/
 upload/
+register/
 static/results
 gan_files/checkpoints
 gan_files/datasets
